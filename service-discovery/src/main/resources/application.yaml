@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: SERVICE-DISCOVERY
+server:
+  port: 8761
+eureka:
+  server:
+    eviction-interval-timer-in-ms: 60000        # Период очистки неактивных экземпляров
+    enable-self-preservation: true              # Безопасность от удаления
+    renewal-percent-threshold: 0.9              # Минимальное соотношение успешных обновлений
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+logging:
+  config: classpath:logback-spring.xml

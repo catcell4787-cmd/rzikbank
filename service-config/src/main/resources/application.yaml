@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: SERVICE-CONFIG
+  cloud:
+    config:
+      server:
+        git:
+          uri: git@github.com:catcell4787-cmd/jcb-config.git
+          clone-on-start: true
+          default-label: main
+          search-paths: '{application}/{profile}'
+server:
+  port: 8888
+logging:
+  config: classpath:logback-spring.xml
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
