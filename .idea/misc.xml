@@ -3,6 +3,7 @@
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="FrameworkDetectionExcludesConfiguration">
     <file type="web" url="file://$PROJECT_DIR$/service-account" />
+    <file type="web" url="file://$PROJECT_DIR$/service-config" />
     <file type="web" url="file://$PROJECT_DIR$/service-discovery" />
   </component>
   <component name="ProjectRootManager" version="2">
