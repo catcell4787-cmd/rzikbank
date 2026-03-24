@@ -3,7 +3,7 @@
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <withJansi>false</withJansi>
         <encoder>
-            <pattern>%d{dd:MM:yyyy HH:mm:ss} %highlight([%-5p]) %magenta([service-account]) %cyan(%logger{26}) : %msg%n</pattern>
+            <pattern>%d{dd:MM:yyyy HH:mm:ss} %highlight([%-5p]) %magenta([service-gateway]) %cyan(%logger{26}) : %msg%n</pattern>
         </encoder>
     </appender>
 

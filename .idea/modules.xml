@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/rzikbank.iml" filepath="$PROJECT_DIR$/rzikbank.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/service-account.main.iml" filepath="$PROJECT_DIR$/.idea/modules/service-account.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/service-account.test.iml" filepath="$PROJECT_DIR$/.idea/modules/service-account.test.iml" />
     </modules>
   </component>
 </project>

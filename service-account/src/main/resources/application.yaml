@@ -2,7 +2,7 @@ server:
   port: 8081
 spring:
   application:
-    name: service-account
+    name: SERVICE-ACCOUNT
   config:
     import: "optional:configserver:http://localhost:8888"
 eureka:

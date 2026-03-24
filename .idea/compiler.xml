@@ -11,6 +11,9 @@
       <module name="service-discovery" options="-parameters" />
       <module name="service-discovery.main" options="-parameters" />
       <module name="service-discovery.test" options="-parameters" />
+      <module name="service-gateway" options="-parameters" />
+      <module name="service-gateway.main" options="-parameters" />
+      <module name="service-gateway.test" options="-parameters" />
     </option>
   </component>
 </project>

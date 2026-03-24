@@ -1,0 +1,26 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: SERVICE-GATEWAY
+  cloud:
+    loadbalancer:
+      retry:
+        max-retries-on-next-service-instance: 3
+        max-retries-on-same-service-instance: 3
+    gateway:
+      server:
+        webmvc:
+          routes:
+            - id: SERVICE-ACCOUNT
+              uri: http://localhost:8081
+              predicates:
+                - Path=/**
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+logging:
+  config: classpath:logback-spring.xml
