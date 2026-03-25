@@ -47,6 +47,19 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public ResponseEntity<?> updateStatus(String email, AccountDto accountDto) {
+        Optional<Account> optionalAccount = accountRepository.findByEmail(email);
+        if (optionalAccount.isEmpty()) {
+            throw new GlobalExceptionHandler.ResourceNotFoundException("Account not found");
+        }
+        Account account = optionalAccount.get();
+        account.setEnabled(accountDto.isEnabled());
+        accountRepository.save(account);
+        AccountDto dto = modelMapper.map(accountDto, AccountDto.class);
+        return ResponseEntity.ok("Status for account " + account.getEmail() + " updated to " + dto.isEnabled());
+    }
+
+    @Override
     public ResponseEntity<?> login(AccountCredentialsDto accountCredentialsDto) {
         Optional<Account> optionalAccount = accountRepository.findByEmail(accountCredentialsDto.getEmail());
         if (optionalAccount.isPresent()) {

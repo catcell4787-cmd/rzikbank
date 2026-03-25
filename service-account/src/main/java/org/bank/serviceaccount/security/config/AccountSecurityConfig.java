@@ -21,7 +21,7 @@ public class AccountSecurityConfig {
     private final JwtFilter jwtFilter;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) {
         http
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
@@ -32,6 +32,7 @@ public class AccountSecurityConfig {
 //                            .logout(logout -> logout.logoutUrl("/logout"))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/register", "/auth/login").permitAll()
+                        .requestMatchers("/auth/update").hasAuthority("ADMIN")
                         .requestMatchers("/auth/{email}").hasAnyAuthority("ADMIN", "MANAGER")
                         .requestMatchers("/clients/{email}/cards/registerCard", "/clients/{email}/cards/getCards").hasAnyAuthority("CLIENT", "MANAGER")
                         .requestMatchers("/clients/add").hasAnyAuthority("ADMIN", "MANAGER")
