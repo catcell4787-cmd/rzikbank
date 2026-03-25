@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -44,8 +43,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public List<AccountDto> findByRole(AccountRole accountRole) {
         List<Account> accounts = accountRepository.findByRole(accountRole);
-        List<AccountDto> dtos = accounts.stream().map(account -> modelMapper.map(account, AccountDto.class)).collect(Collectors.toList());
-        return dtos;
+        return accounts.stream().map(account -> modelMapper.map(account, AccountDto.class)).collect(Collectors.toList());
     }
 
     @Override
