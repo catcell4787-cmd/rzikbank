@@ -15,6 +15,11 @@ import org.springframework.web.bind.annotation.*;
 public class AccountController {
     private final AccountService accountService;
 
+    @GetMapping("/hello")
+    private ResponseEntity<?> startPage() {
+        return ResponseEntity.ok("Rzikbank");
+    }
+
     @PostMapping("/login")
     private ResponseEntity<?> login(@Valid @RequestBody AccountCredentialsDto accountCredentialsDto) {
         return ResponseEntity.ok(accountService.login(accountCredentialsDto));

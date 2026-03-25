@@ -25,13 +25,13 @@ public class AccountSecurityConfig {
         http
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
-//                .formLogin(config ->
-//                        config
-//                            .loginPage("/auth/login")
-//                            .defaultSuccessUrl("/auth/hello", true))
-//                            .logout(logout -> logout.logoutUrl("/logout"))
+                .formLogin(config ->
+                        config
+                            .loginPage("/auth/hello")
+                            .defaultSuccessUrl("/auth/hello", true))
+                            .logout(logout -> logout.logoutUrl("/logout"))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/register", "/auth/login").permitAll()
+                        .requestMatchers("/auth/register", "/auth/login", "/auth/hello").permitAll()
                         .requestMatchers("/auth/update").hasAuthority("ADMIN")
                         .requestMatchers("/auth/{email}").hasAnyAuthority("ADMIN", "MANAGER")
                         .requestMatchers("/clients/{email}/cards/registerCard", "/clients/{email}/cards/getCards").hasAnyAuthority("CLIENT", "MANAGER")
