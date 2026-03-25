@@ -2,7 +2,7 @@ package org.bank.serviceaccount;
 
 import org.bank.serviceaccount.exception.GlobalExceptionHandler;
 import org.bank.serviceaccount.model.dto.AccountCredentialsDto;
-import org.bank.serviceaccount.model.entity.AccountEntity;
+import org.bank.serviceaccount.model.entity.Account;
 import org.bank.serviceaccount.model.role.AccountRole;
 import org.bank.serviceaccount.repository.AccountRepository;
 import org.bank.serviceaccount.security.jwt.JwtService;
@@ -45,14 +45,14 @@ public class AccountTest {
         dto.setPassword("112");
         var role = AccountRole.CLIENT;
         var enabled = false;
-        var expectedEntity = new AccountEntity();
+        var expectedEntity = new Account();
 
         expectedEntity.setEmail(dto.getEmail());
         expectedEntity.setPassword(dto.getPassword());
         expectedEntity.setRole(role);
         expectedEntity.setEnabled(enabled);
 
-        when(modelMapper.map(dto, AccountEntity.class)).thenReturn(expectedEntity);
+        when(modelMapper.map(dto, Account.class)).thenReturn(expectedEntity);
         ResponseEntity<?> result = accountService.register(dto, role, enabled);
         assertThat(result.getStatusCode().is2xxSuccessful());
         verify(accountRepository).save(expectedEntity);

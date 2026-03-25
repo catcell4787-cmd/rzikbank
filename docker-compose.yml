@@ -12,17 +12,6 @@ services:
       MYSQL_PASSWORD: acc
     volumes:
       - db_data:/var/lib/mysql
-
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    restart: unless-stopped
-    ports:
-      - "8090:80" # Порт для доступа к phpMyAdmin
-    environment:
-      PMA_HOST: acc
-      MYSQL_ROOT_PASSWORD: acc
-    depends_on:
-      - db
 networks:
   postgres:
     driver: bridge

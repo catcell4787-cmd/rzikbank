@@ -2,7 +2,7 @@ package org.bank.serviceaccount.utils;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.bank.serviceaccount.model.entity.AccountEntity;
+import org.bank.serviceaccount.model.entity.Account;
 import org.bank.serviceaccount.model.role.AccountRole;
 import org.bank.serviceaccount.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,7 +22,7 @@ public class AdminCreator {
     @PostConstruct
     public void createAdmin() {
         if (!accountRepository.existsByEmail(adminEmail)) {
-            AccountEntity account = new AccountEntity();
+            Account account = new Account();
             account.setEmail(adminEmail);
             account.setPassword(passwordEncoder.encode(adminPassword));
             account.setEnabled(true);

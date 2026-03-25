@@ -2,7 +2,7 @@ package org.bank.serviceaccount.security;
 
 import lombok.RequiredArgsConstructor;
 import org.bank.serviceaccount.exception.GlobalExceptionHandler;
-import org.bank.serviceaccount.model.entity.AccountEntity;
+import org.bank.serviceaccount.model.entity.Account;
 import org.bank.serviceaccount.repository.AccountRepository;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -24,9 +24,9 @@ public class CustomUserServiceImpl implements UserDetailsService {
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<AccountEntity> optionalAccount = accountRepository.findByEmail(username);
+        Optional<Account> optionalAccount = accountRepository.findByEmail(username);
         if (optionalAccount.isPresent()) {
-            AccountEntity account = optionalAccount.get();
+            Account account = optionalAccount.get();
             if (!account.isEnabled()) {
                 throw new GlobalExceptionHandler.AccountStatusException("Account is not enabled");
             }

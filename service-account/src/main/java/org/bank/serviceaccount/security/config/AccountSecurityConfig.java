@@ -31,11 +31,11 @@ public class AccountSecurityConfig {
 //                            .defaultSuccessUrl("/auth/hello", true))
 //                            .logout(logout -> logout.logoutUrl("/logout"))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/register", "/auth/login", "/auth/hello").permitAll()
+                        .requestMatchers("/auth/register", "/auth/login").permitAll()
                         .requestMatchers("/auth/{email}").hasAnyAuthority("ADMIN", "MANAGER")
                         .requestMatchers("/clients/{email}/cards/registerCard", "/clients/{email}/cards/getCards").hasAnyAuthority("CLIENT", "MANAGER")
+                        .requestMatchers("/clients/add").hasAnyAuthority("ADMIN", "MANAGER")
                         .requestMatchers("/clients/{email}/loans/createLoan", "/clients/{email}/loans/getLoans").hasAnyAuthority("CLIENT", "MANAGER")
-                        .requestMatchers("/clients/list").hasAnyAuthority("ADMIN", "MANAGER")
                         .requestMatchers("/clients/{email}", "/clients/{email}/updateStatus").hasAnyAuthority("ADMIN", "MANAGER")
                         .requestMatchers("/managers/**").hasAuthority("ADMIN")
                         .requestMatchers("/managers/{email}").hasAnyAuthority("ADMIN", "MANAGER")
