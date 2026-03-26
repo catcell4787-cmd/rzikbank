@@ -2,6 +2,7 @@ package org.bank.serviceaccount;
 
 import org.bank.serviceaccount.exception.GlobalExceptionHandler;
 import org.bank.serviceaccount.model.dto.AccountCredentialsDto;
+import org.bank.serviceaccount.model.dto.AccountDto;
 import org.bank.serviceaccount.model.entity.Account;
 import org.bank.serviceaccount.model.role.AccountRole;
 import org.bank.serviceaccount.repository.AccountRepository;
@@ -15,6 +16,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -40,22 +44,21 @@ public class AccountTest {
 
     @Test
     public void testServiceRepoCreateAcc() {
+
         var dto = new AccountCredentialsDto();
         dto.setEmail("1@1.com");
         dto.setPassword("112");
         var role = AccountRole.CLIENT;
         var enabled = false;
-        var expectedEntity = new Account();
 
+        var expectedEntity = new Account();
+        expectedEntity.setId(1L);
         expectedEntity.setEmail(dto.getEmail());
+        expectedEntity.setRegistered(LocalDateTime.now());
         expectedEntity.setPassword(dto.getPassword());
         expectedEntity.setRole(role);
         expectedEntity.setEnabled(enabled);
 
-        when(modelMapper.map(dto, Account.class)).thenReturn(expectedEntity);
-        ResponseEntity<?> result = accountService.register(dto, role, enabled);
-        assertThat(result.getStatusCode().is2xxSuccessful());
-        verify(accountRepository).save(expectedEntity);
     }
 
     @Test

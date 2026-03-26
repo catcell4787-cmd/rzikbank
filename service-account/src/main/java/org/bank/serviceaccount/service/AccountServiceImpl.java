@@ -5,9 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.bank.serviceaccount.exception.GlobalExceptionHandler;
 import org.bank.serviceaccount.model.dto.AccountCredentialsDto;
 import org.bank.serviceaccount.model.dto.AccountDto;
+import org.bank.serviceaccount.model.dto.CardDto;
 import org.bank.serviceaccount.model.entity.Account;
 import org.bank.serviceaccount.model.role.AccountRole;
 import org.bank.serviceaccount.repository.AccountRepository;
+import org.bank.serviceaccount.rest.CardFeignClient;
 import org.bank.serviceaccount.security.jwt.JwtService;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
@@ -26,9 +28,13 @@ public class AccountServiceImpl implements AccountService {
     private final ModelMapper modelMapper;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
+    private final CardFeignClient cardFeignClient;
 
     @Override
-    public ResponseEntity<?> register(AccountCredentialsDto accountCredentialsDto, AccountRole accountRole, boolean status) {
+    public AccountDto register(
+            AccountCredentialsDto accountCredentialsDto,
+            AccountRole accountRole,
+            boolean status) {
         if (accountRepository.existsByEmail(accountCredentialsDto.getEmail())) {
             throw new GlobalExceptionHandler.ConflictException("Email already exists");
         }
@@ -37,17 +43,21 @@ public class AccountServiceImpl implements AccountService {
         account.setEnabled(status);
         account.setRole(accountRole);
         accountRepository.save(account);
-        return ResponseEntity.ok("Account created successfully");
+        AccountDto accountDto = modelMapper.map(account, AccountDto.class);
+        log.info("Account {} has been created", account.getId());
+        return accountDto;
     }
 
     @Override
     public List<AccountDto> findByRole(AccountRole accountRole) {
         List<Account> accounts = accountRepository.findByRole(accountRole);
-        return accounts.stream().map(account -> modelMapper.map(account, AccountDto.class)).collect(Collectors.toList());
+        return accounts.stream()
+                .map(account -> modelMapper.map(account, AccountDto.class))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public ResponseEntity<?> updateStatus(String email, AccountDto accountDto) {
+    public AccountDto updateStatus(String email, AccountDto accountDto) {
         Optional<Account> optionalAccount = accountRepository.findByEmail(email);
         if (optionalAccount.isEmpty()) {
             throw new GlobalExceptionHandler.ResourceNotFoundException("Account not found");
@@ -55,12 +65,28 @@ public class AccountServiceImpl implements AccountService {
         Account account = optionalAccount.get();
         account.setEnabled(accountDto.isEnabled());
         accountRepository.save(account);
-        AccountDto dto = modelMapper.map(accountDto, AccountDto.class);
-        return ResponseEntity.ok("Status for account " + account.getEmail() + " updated to " + dto.isEnabled());
+        return modelMapper.map(accountDto, AccountDto.class);
     }
 
     @Override
-    public ResponseEntity<?> login(AccountCredentialsDto accountCredentialsDto) {
+    public CardDto registerCard(String email) {
+        if (!accountRepository.existsByEmail(email)) {
+            return cardFeignClient.registerCard(email);
+
+        }
+        throw new GlobalExceptionHandler.ResourceNotFoundException("Card is already exists");
+    }
+
+    @Override
+    public CardDto getCard(String email) {
+        if (!accountRepository.existsByEmail(email)) {
+            throw new GlobalExceptionHandler.ResourceNotFoundException("Account not found");
+        }
+        return cardFeignClient.get(email);
+    }
+
+    @Override
+    public AccountDto login(AccountCredentialsDto accountCredentialsDto) {
         Optional<Account> optionalAccount = accountRepository.findByEmail(accountCredentialsDto.getEmail());
         if (optionalAccount.isPresent()) {
             Account account = optionalAccount.get();
@@ -70,7 +96,7 @@ public class AccountServiceImpl implements AccountService {
             if (passwordEncoder.matches(accountCredentialsDto.getPassword(), account.getPassword())) {
                 String token = jwtService.getRefreshToken(account.getEmail());
                 System.out.println(token);
-                return ResponseEntity.ok("Logged in successfully");
+                return modelMapper.map(account, AccountDto.class);
             } else {
                 throw new GlobalExceptionHandler.AuthenticationException("Invalid password");
             }

@@ -16,6 +16,10 @@ spring:
               uri: http://localhost:8081
               predicates:
                 - Path=/**
+            - id: SERVICE-CARD
+              uri: http://localhost:8082
+              predicates:
+                - Path=/**
 eureka:
   client:
     register-with-eureka: true
