@@ -1,18 +1,19 @@
 package org.bank.serviceaccount.service;
 
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bank.serviceaccount.exception.GlobalExceptionHandler;
 import org.bank.serviceaccount.model.dto.AccountCredentialsDto;
 import org.bank.serviceaccount.model.dto.AccountDto;
 import org.bank.serviceaccount.model.dto.CardDto;
+import org.bank.serviceaccount.model.dto.ClientDto;
 import org.bank.serviceaccount.model.entity.Account;
 import org.bank.serviceaccount.model.role.AccountRole;
 import org.bank.serviceaccount.repository.AccountRepository;
 import org.bank.serviceaccount.rest.CardFeignClient;
 import org.bank.serviceaccount.security.jwt.JwtService;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -70,9 +71,8 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public CardDto registerCard(String email) {
-        if (!accountRepository.existsByEmail(email)) {
+        if (accountRepository.existsByEmail(email)) {
             return cardFeignClient.registerCard(email);
-
         }
         throw new GlobalExceptionHandler.ResourceNotFoundException("Card is already exists");
     }
@@ -82,7 +82,24 @@ public class AccountServiceImpl implements AccountService {
         if (!accountRepository.existsByEmail(email)) {
             throw new GlobalExceptionHandler.ResourceNotFoundException("Account not found");
         }
-        return cardFeignClient.get(email);
+        return cardFeignClient.getCard(email);
+    }
+
+    @Override
+    public ClientDto getClientInfo(String email) {
+        Optional<Account> optionalAccount = accountRepository.findByEmail(email);
+        if (optionalAccount.isPresent()) {
+            try {
+                Account account = optionalAccount.get();
+                ClientDto clientDto = modelMapper.map(account, ClientDto.class);
+                CardDto cardDto = cardFeignClient.getCard(email);
+                clientDto.setCard(cardDto);
+                return clientDto;
+            } catch (FeignException e) {
+                throw new GlobalExceptionHandler.ResourceNotFoundException("Card is not registered");
+            }
+        }
+        throw new GlobalExceptionHandler.ResourceNotFoundException("Account is not registered");
     }
 
     @Override

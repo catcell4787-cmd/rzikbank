@@ -34,6 +34,7 @@ public class AccountSecurityConfig {
                         .requestMatchers("/auth/register", "/auth/login", "/auth/hello").permitAll()
                         .requestMatchers("/auth/update").hasAuthority("ADMIN")
                         .requestMatchers("/auth/{email}").hasAnyAuthority("ADMIN", "MANAGER")
+                        .requestMatchers("/clients/{email}").hasAnyAuthority("ADMIN", "MANAGER")
                         .requestMatchers("/clients/{email}/cards/register", "/clients/{email}/cards/get").hasAnyAuthority("CLIENT", "MANAGER", "ADMIN")
                         .requestMatchers("/clients/add").hasAnyAuthority("ADMIN", "MANAGER")
                         .requestMatchers("/clients/{email}/loans/createLoan", "/clients/{email}/loans/getLoans").hasAnyAuthority("CLIENT", "MANAGER")

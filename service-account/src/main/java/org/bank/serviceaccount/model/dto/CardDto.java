@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class CardDto {
 
-    private String cardHolderУ;
+    private String cardHolder;
     private String cardNumber;
     private String cardBalance;
     private String cardStatus;

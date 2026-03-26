@@ -3,6 +3,7 @@ package org.bank.serviceaccount.service;
 import org.bank.serviceaccount.model.dto.AccountCredentialsDto;
 import org.bank.serviceaccount.model.dto.AccountDto;
 import org.bank.serviceaccount.model.dto.CardDto;
+import org.bank.serviceaccount.model.dto.ClientDto;
 import org.bank.serviceaccount.model.role.AccountRole;
 
 import java.util.List;
@@ -15,4 +16,5 @@ public interface AccountService {
     AccountDto updateStatus(String email, AccountDto accountDto);
     CardDto registerCard(String email);
     CardDto getCard(String email);
+    ClientDto getClientInfo(String email);
 }
