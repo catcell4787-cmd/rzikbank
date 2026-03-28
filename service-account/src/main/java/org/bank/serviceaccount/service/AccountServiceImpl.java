@@ -72,9 +72,12 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public CardDto registerCard(String email) {
         if (accountRepository.existsByEmail(email)) {
-            return cardFeignClient.registerCard(email);
+            if (cardFeignClient.getCard(email) == null) {
+                return cardFeignClient.registerCard(email);
+            }
+            throw new GlobalExceptionHandler.ConflictException("Card already exists");
         }
-        throw new GlobalExceptionHandler.ResourceNotFoundException("Card is already exists");
+        throw new GlobalExceptionHandler.ResourceNotFoundException("Account is not registered");
     }
 
     @Override

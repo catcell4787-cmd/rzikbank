@@ -31,7 +31,7 @@ public class AccountController {
     }
 
     @GetMapping("/{email}")
-    private ResponseEntity<?> getAccount(@PathVariable("email") String email) {
+    private ResponseEntity<?> getAccount(@PathVariable String email) {
         return ResponseEntity.ok(accountService.findByEmail(email));
     }
 
