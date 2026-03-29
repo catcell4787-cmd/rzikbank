@@ -91,15 +91,16 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public ClientDto getClientInfo(String email) {
         Optional<Account> optionalAccount = accountRepository.findByEmail(email);
+        ClientDto clientDto = new ClientDto();
         if (optionalAccount.isPresent()) {
             try {
                 Account account = optionalAccount.get();
-                ClientDto clientDto = modelMapper.map(account, ClientDto.class);
+                clientDto = modelMapper.map(account, ClientDto.class);
                 CardDto cardDto = cardFeignClient.getCard(email);
                 clientDto.setCard(cardDto);
                 return clientDto;
             } catch (FeignException e) {
-                throw new GlobalExceptionHandler.ResourceNotFoundException("Card is not registered");
+                return clientDto;
             }
         }
         throw new GlobalExceptionHandler.ResourceNotFoundException("Account is not registered");

@@ -30,6 +30,6 @@ public class CardServiceImpl implements CardService {
     @Override
     public CardDto getCard(String email) {
         Optional<Card> card = cardRepository.findCardByCardHolder(email);
-        return modelMapper.map(card.get(), CardDto.class);
+        return card.map(value -> modelMapper.map(value, CardDto.class)).orElse(null);
     }
 }
