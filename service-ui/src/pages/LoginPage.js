@@ -1,10 +1,7 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import {
-    MDBContainer,
-    MDBInput
-} from 'mdb-react-ui-kit';
+import {useNavigate} from 'react-router-dom';
+import {MDBContainer, MDBInput} from 'mdb-react-ui-kit';
 
 function LoginPage() {
     const [username, setUsername] = useState('');
@@ -19,9 +16,9 @@ function LoginPage() {
                 return;
             }
 
-            const response = await axios.post('http://192.168.50.123:8080/auth/login', { username, password });
+            const response = await axios.post('http://localhost:8080/auth/login', {username, password});
             console.log('Login successful:', response.data);
-            history('/hello');
+            history('/dashboard');
         } catch (error) {
             console.error('Login failed:', error.response ? error.response.data : error.message);
             setError('Invalid username or password.');
