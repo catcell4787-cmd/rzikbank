@@ -1,18 +1,22 @@
 import './App.css';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
-import MainPage from './pages/MainPage';
-import ProtectedRoute from "./routes/ProtectedRoute";
+import SignupPage from "./pages/SignUpPage";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   return (
-      <Router>
-          <Routes>
-              <Route path="auth/login" element={<LoginPage />} />
-              <Route path="auth/hello" element={<ProtectedRoute><MainPage/></ProtectedRoute>} />
-              <Route path="*" element={<Navigate to="/login" />} />
-          </Routes>
-      </Router>
+      <div className="App">
+          <Router>
+
+              <Routes>
+                  <Route path="/" element={<LoginPage/>} />
+                  <Route path="/auth/register" element={ <SignupPage/>} />
+                  <Route path = "/auth/hello" element={<Dashboard/>}/>
+              </Routes>
+
+          </Router>
+      </div>
   );
 }
 
