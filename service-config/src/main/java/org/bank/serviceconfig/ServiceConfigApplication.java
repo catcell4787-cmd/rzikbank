@@ -12,7 +12,6 @@ public class ServiceConfigApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(ServiceConfigApplication.class, args);
-        System.out.println("Привет");
     }
 
 }
